@@ -26,6 +26,7 @@ class CanchasResult {
     this.tipoNombre,
     this.deporte,
     this.deporteTipo,
+    this.canchaEstado,
     this.promoPrecio,
     this.promoInicio,
     this.promoFin,
@@ -51,6 +52,7 @@ class CanchasResult {
   String tipoNombre;
   String deporte;
   String deporteTipo;
+  String canchaEstado;
   String promoPrecio;
   String promoInicio;
   String promoFin;
@@ -80,6 +82,7 @@ class CanchasResult {
         tipoNombre: json["tipoNombre"],
         deporte: json["deporte"],
         deporteTipo: json["deporteTipo"],
+        canchaEstado: json["canchaEstado"],
         promoPrecio: json["promo_precio"],
         promoInicio: json["promo_inicio"],
         promoFin: json["promo_fin"],

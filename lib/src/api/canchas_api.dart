@@ -48,6 +48,7 @@ class CanchasApi {
           canchas.promoInicio = decodedData['results'][i]['promo_inicio'];
           canchas.promoFin = decodedData['results'][i]['promo_fin'];
           canchas.promoEstado = decodedData['results'][i]['promo_estado'];
+          canchas.canchaEstado = decodedData['results'][i]['cancha_estado'];
 
           await canchasDatabase.insertarMisCanchas(canchas);
         }
