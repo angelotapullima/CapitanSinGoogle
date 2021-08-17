@@ -494,7 +494,7 @@ class _NegociosTabState extends State<NegociosTab> {
                         fontSize: responsive.ip(1.9),
                       ),
                     ),
-                    ('${negocios.distancia}'.isNotEmpty)
+                    /*  ('${negocios.distancia}'.isNotEmpty)
                         ? Row(
                             children: [
                               Container(
@@ -517,7 +517,7 @@ class _NegociosTabState extends State<NegociosTab> {
                               ),
                             ],
                           )
-                        : Container(),
+                        : Container(), */
                   ],
                 ),
               ),
