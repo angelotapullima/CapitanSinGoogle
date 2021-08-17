@@ -201,141 +201,145 @@ class _NegociosTabState extends State<NegociosTab> {
   }
 
   Widget _listaNegocios(List<NegociosModelResult> negocios, Responsive responsive, PublicidadBloc publicidadBloc) {
-    return ListView.builder(
-        padding: EdgeInsets.only(bottom: responsive.hp(7)),
-        itemCount: negocios.length + 1,
-        itemBuilder: (context, i) {
-          if (i == 0) {
-            return StreamBuilder(
-                stream: publicidadBloc.publicidad2Stream,
-                builder: (context, AsyncSnapshot<List<PublicidadModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data.length > 0) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CarouselSlider.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, x, y) {
-                              return InkWell(
-                                onTap: () {
-                                  guardarDatosDeVisitaPublicidad(snapshot.data[0].idPublicidad);
-                                  if (snapshot.data[x].linkPublicidad != null) {
-                                    Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        pageBuilder: (context, animation, secondaryAnimation) {
-                                          return PublicidadWeb(
-                                            titulo: 'Web del anunciante',
-                                            web: snapshot.data[x].linkPublicidad,
-                                          );
-                                        },
-                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                          var begin = Offset(0.0, 1.0);
-                                          var end = Offset.zero;
-                                          var curve = Curves.ease;
+     return StreamBuilder(
+      stream: publicidadBloc.publicidad2Stream,
+      builder: (context, AsyncSnapshot<List<PublicidadModel>> snapshot) {
+        return ListView.builder(
+          padding: EdgeInsets.only(bottom: responsive.hp(7)),
+          itemCount: negocios.length + 1,
+          addAutomaticKeepAlives: false,
+          itemBuilder: (context, i) {
+            if (i == 0) {
+              if (snapshot.hasData) {
+                if (snapshot.data.length > 0) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CarouselSlider.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, x, y) {
+                          return InkWell(
+                            onTap: () {
+                              guardarDatosDeVisitaPublicidad(snapshot.data[0].idPublicidad);
+                              if (snapshot.data[x].linkPublicidad != null) {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation, secondaryAnimation) {
+                                      return PublicidadWeb(
+                                        titulo: 'Web del anunciante',
+                                        web: snapshot.data[x].linkPublicidad,
+                                      );
+                                    },
+                                    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                      var begin = Offset(0.0, 1.0);
+                                      var end = Offset.zero;
+                                      var curve = Curves.ease;
 
-                                          var tween = Tween(begin: begin, end: end).chain(
-                                            CurveTween(curve: curve),
-                                          );
+                                      var tween = Tween(begin: begin, end: end).chain(
+                                        CurveTween(curve: curve),
+                                      );
 
-                                          return SlideTransition(
-                                            position: animation.drive(tween),
-                                            child: child,
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: responsive.wp(1), vertical: responsive.hp(1)),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.0),
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
                                   ),
-                                  height: responsive.hp(20),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: CachedNetworkImage(
-                                      placeholder: (context, url) => Container(
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        child: Image(
-                                          image: AssetImage('assets/img/loading.gif'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      errorWidget: (context, url, error) => Container(
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        child: Center(
-                                          child: Icon(Icons.error),
-                                        ),
-                                      ),
-                                      imageUrl: '$apiBaseURL/${snapshot.data[x].imagenPublicidad}',
-                                      imageBuilder: (context, imageProvider) => Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                                );
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: responsive.wp(1), vertical: responsive.hp(1)),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              height: responsive.hp(20),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: CachedNetworkImage(
+                                  placeholder: (context, url) => Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: Image(
+                                      image: AssetImage('assets/img/loading.gif'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: Center(
+                                      child: Icon(Icons.error),
+                                    ),
+                                  ),
+                                  imageUrl: '$apiBaseURL/${snapshot.data[x].imagenPublicidad}',
+                                  imageBuilder: (context, imageProvider) => Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                 ),
-                              );
+                              ),
+                            ),
+                          );
+                        },
+                        options: CarouselOptions(
+                            height: responsive.hp(20),
+                            onPageChanged: (index, page) {
+                              //change.changeIndex(index);
+                              setState(() {
+                                        _indexPage = index;
+                                        _cargaInicial++;
+                                      }); 
                             },
-                            options: CarouselOptions(
-                                height: responsive.hp(20),
-                                onPageChanged: (index, page) {
-                                  setState(() {
-                                    _indexPage = index;
-                                    _cargaInicial++;
-                                  });
-                                },
-                                enlargeCenterPage: true,
-                                autoPlay: true,
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                autoPlayInterval: Duration(seconds: 6),
-                                autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                                viewportFraction: 0.8),
-                          ),
-                          SizedBox(
-                            height: responsive.hp(1),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              snapshot.data.length,
-                              (index) => Container(
-                                width: 10,
-                                height: 10,
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                decoration: BoxDecoration(
-                                  color: (_indexPage >= index - 0.5 && _indexPage < index + 0.5) ? Colors.green : Colors.grey,
-                                  shape: BoxShape.circle,
+                            enlargeCenterPage: true,
+                            autoPlay: true,
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            autoPlayInterval: Duration(seconds: 6),
+                            autoPlayAnimationDuration: Duration(milliseconds: 2000),
+                            viewportFraction: 0.8),
+                      ),
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
+                       Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(
+                                snapshot.data.length,
+                                (index) => Container(
+                                  width: 10,
+                                  height: 10,
+                                  margin: EdgeInsets.symmetric(horizontal: 5),
+                                  decoration: BoxDecoration(
+                                    color: (_indexPage >= index - 0.5 && _indexPage < index + 0.5) ? Colors.green : Colors.grey,
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            height: responsive.hp(1),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return Container();
-                    }
-                  } else {
-                    return CargandoWidget();
-                  }
-                });
-          }
-          int index = i - 1;
-          return _crearItem(context, negocios[index]);
-        });
+                      SizedBox(
+                        height: responsive.hp(1),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              } else {
+                return CargandoWidget();
+              }
+            }
+            int index = i - 1;
+            return _crearItem(context, negocios[index]);
+          },
+        );
+      },
+    );
   }
 
   Widget _crearItem(BuildContext context, NegociosModelResult negocios) {
