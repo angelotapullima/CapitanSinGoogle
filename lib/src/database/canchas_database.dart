@@ -10,9 +10,9 @@ class CanchasDatabase {
       final db = await dbprovider.database;
 
       final res = await db.rawInsert(
-          "INSERT OR REPLACE INTO Canchas (cancha_id,id_empresa,nombre,dimensiones,precioD,precioN,foto,fecha_actual,tipo,tipoNombre,deporte,deporteTipo,promo_precio,promo_inicio,promo_fin,promo_estado) "
+          "INSERT OR REPLACE INTO Canchas (cancha_id,id_empresa,nombre,dimensiones,precioD,precioN,foto,fecha_actual,tipo,tipoNombre,deporte,deporteTipo,canchaEstado,promo_precio,promo_inicio,promo_fin,promo_estado) "
           "VALUES ('${canchas.canchaId}','${canchas.idEmpresa}','${canchas.nombre}','${canchas.dimensiones}','${canchas.precioD}','${canchas.precioN}','${canchas.foto}',"
-          "'${canchas.fechaActual}','${canchas.tipo}','${canchas.tipoNombre}','${canchas.deporte}','${canchas.deporteTipo}','${canchas.promoPrecio}','${canchas.promoInicio}','${canchas.promoFin}','${canchas.promoEstado}')");
+          "'${canchas.fechaActual}','${canchas.tipo}','${canchas.tipoNombre}','${canchas.deporte}','${canchas.deporteTipo}','${canchas.canchaEstado}','${canchas.promoPrecio}','${canchas.promoInicio}','${canchas.promoFin}','${canchas.promoEstado}')");
       return res;
     } catch (exception) {
       print(exception);
@@ -21,7 +21,7 @@ class CanchasDatabase {
 
   Future<List<CanchasResult>> obtenerCanchasPorIdEmpresa(String id) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Canchas WHERE id_empresa='$id'");
+    final res = await db.rawQuery("SELECT * FROM Canchas WHERE id_empresa='$id' and canchaEstado = '1' ");
 
     List<CanchasResult> list = res.isNotEmpty ? res.map((c) => CanchasResult.fromJson(c)).toList() : [];
 
@@ -30,7 +30,7 @@ class CanchasDatabase {
 
   Future<List<CanchasResult>> obtenerCanchasPorIdEmpresaAgrupadoPorDeporteTipo(String id) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Canchas WHERE id_empresa='$id' group by deporteTipo ");
+    final res = await db.rawQuery("SELECT * FROM Canchas WHERE id_empresa='$id' and canchaEstado = '1' group by deporteTipo ");
 
     List<CanchasResult> list = res.isNotEmpty ? res.map((c) => CanchasResult.fromJson(c)).toList() : [];
 
@@ -39,7 +39,7 @@ class CanchasDatabase {
 
   Future<List<CanchasResult>> obtenerCanchasPorDeporteTipo(String idEmpresa, String deporteTipo) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Canchas WHERE id_empresa='$idEmpresa' and  deporteTipo = '$deporteTipo'");
+    final res = await db.rawQuery("SELECT * FROM Canchas WHERE id_empresa='$idEmpresa'  and canchaEstado = '1' and deporteTipo = '$deporteTipo'");
 
     List<CanchasResult> list = res.isNotEmpty ? res.map((c) => CanchasResult.fromJson(c)).toList() : [];
 
@@ -48,7 +48,7 @@ class CanchasDatabase {
 
   Future<List<CanchasResult>> obtenerCanchasPorId(String id) async {
     final db = await dbprovider.database;
-    final res = await db.rawQuery("SELECT * FROM Canchas WHERE cancha_id='$id'");
+    final res = await db.rawQuery("SELECT * FROM Canchas WHERE cancha_id='$id' and canchaEstado = '1'");
 
     List<CanchasResult> list = res.isNotEmpty ? res.map((c) => CanchasResult.fromJson(c)).toList() : [];
 

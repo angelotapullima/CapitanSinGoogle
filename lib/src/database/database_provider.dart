@@ -20,7 +20,7 @@ class DatabaseProvider {
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
 
-    final path = join(documentsDirectory.path, 'capitanv5.db');
+    final path = join(documentsDirectory.path, 'capitanv6.db');
 
     Future _onConfigure(Database db) async {
       await db.execute('PRAGMA foreign_keys = ON');
@@ -98,6 +98,7 @@ class DatabaseProvider {
           ' tipoNombre TEXT,'
           ' deporte TEXT,'
           ' deporteTipo TEXT,'
+          ' canchaEstado TEXT,'
           ' promo_precio TEXT,'
           ' promo_inicio TEXT,'
           ' promo_fin TEXT,'
