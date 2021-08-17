@@ -2,6 +2,7 @@ import 'package:capitan_sin_google/src/bloc/provider_bloc.dart';
 import 'package:capitan_sin_google/src/pages/Onboarding/screens/landing_page.dart';
 import 'package:capitan_sin_google/src/pages/actualizar_foto_perfil.dart';
 import 'package:capitan_sin_google/src/pages/forgot_password.dart';
+import 'package:capitan_sin_google/src/pages/guiaAplicacion/screens/landing_page_guia.dart';
 import 'package:capitan_sin_google/src/pages/home_page.dart';
 import 'package:capitan_sin_google/src/pages/login_page.dart';
 import 'package:capitan_sin_google/src/pages/registro_page.dart';
@@ -118,6 +119,7 @@ class _MyAppState extends State<MyApp> {
             "login": (BuildContext context) => LoginPage(),
             "onboarding": (BuildContext context) => LandingPage(),
             "home": (BuildContext context) => HomePage(),
+            'guia': (BuildContext context) => LandingPageGuia(),
             /* "homeSubTorneo": (BuildContext context) => HomeSubTorneoPage(),
               "homeTorneo": (BuildContext context) => HomeTorneoPage(),
               "notificationPage": (BuildContext context) => NotificationPage(), */

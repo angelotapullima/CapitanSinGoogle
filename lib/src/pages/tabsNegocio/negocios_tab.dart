@@ -4,7 +4,6 @@ import 'package:capitan_sin_google/src/bloc/publicidad_%20bloc.dart';
 import 'package:capitan_sin_google/src/models/negocios_model.dart';
 import 'package:capitan_sin_google/src/models/publicidad_model.dart';
 import 'package:capitan_sin_google/src/pages/tabsNegocio/detalle_negocio_page.dart';
-import 'package:capitan_sin_google/src/pages/tabsNegocio/mis_negocios_tab.dart';
 import 'package:capitan_sin_google/src/pages/web_publicidad.dart';
 import 'package:capitan_sin_google/src/preferencias/preferencias_usuario.dart';
 import 'package:capitan_sin_google/src/utils/WidgetCargandp.dart';
