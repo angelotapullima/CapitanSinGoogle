@@ -94,4 +94,13 @@ class NegociosDatabase {
 
     return res;
   }
+
+
+  deleteGaleriaNegociosPorId(String id) async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM GaleriaNegocios WHERE id_galeria='$id'");
+
+    return res;
+  }
 }

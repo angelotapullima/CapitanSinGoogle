@@ -4,11 +4,13 @@ import 'package:capitan_sin_google/src/bloc/ciudades_bloc.dart';
 import 'package:capitan_sin_google/src/bloc/galeria_negocios_bloc.dart';
 import 'package:capitan_sin_google/src/bloc/login_bloc.dart';
 import 'package:capitan_sin_google/src/bloc/negocios_bloc.dart';
+import 'package:capitan_sin_google/src/bloc/promociones_empresa.dart';
 import 'package:capitan_sin_google/src/bloc/publicidad_%20bloc.dart';
 import 'package:capitan_sin_google/src/bloc/reportes/reportes_bloc.dart';
 import 'package:capitan_sin_google/src/bloc/reportes/reportsMensualAndSemanal.dart';
 import 'package:capitan_sin_google/src/bloc/reservas_bloc.dart';
 import 'package:capitan_sin_google/src/bloc/restablecerPassword_bloc.dart';
+import 'package:capitan_sin_google/src/widgets/charts/reportes_bloc.dart';
 import 'package:flutter/material.dart';
 
 //singleton para obtner una unica instancia del Bloc
@@ -26,6 +28,10 @@ class ProviderBloc extends InheritedWidget {
   final galeriaBloc = GaleriaBloc();
   final canchasBloc = CanchasBloc();
   final reservasBloc = ReservasBloc();
+  final promocionesEmpresasBloc = PromocionesEmpresasBloc();
+
+
+  final reporteNewBloc = ResporteBloc();
 
   /* 
   final foroBloc = ForoBloc();
@@ -96,6 +102,14 @@ class ProviderBloc extends InheritedWidget {
   static ReservasBloc reservas(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).reservasBloc;
   }
+
+
+
+
+  static PromocionesEmpresasBloc proEm(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).promocionesEmpresasBloc;
+  }
+
 
   /* 
 
@@ -240,4 +254,12 @@ class ProviderBloc extends InheritedWidget {
   static RestablecerPasswordBloc restabContra(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).restaPasswdBloc;
   }
+
+
+
+  //PARA ACTUALIZAR MONTO RECAUDADO
+  static ResporteBloc montoRecaudado(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>()).reporteNewBloc;
+  }
+
 }

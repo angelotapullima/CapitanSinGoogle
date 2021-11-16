@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 
 class DetalleCanchaBLoc extends ChangeNotifier {
   ValueNotifier<bool> _cargando = ValueNotifier(false);
-  ValueNotifier<bool> get cargando => this._cargando; 
+  ValueNotifier<bool> get cargando => this._cargando;
   ValueNotifier<bool> _show = ValueNotifier(true);
   ValueNotifier<bool> get show => this._show;
 
@@ -24,7 +24,7 @@ class DetalleCanchaBLoc extends ChangeNotifier {
   void _listener() {
     if (_controller.position.userScrollDirection == ScrollDirection.reverse) {
       _show.value = false;
-    } else if (_controller.position.userScrollDirection == ScrollDirection.forward ) {
+    } else if (_controller.position.userScrollDirection == ScrollDirection.forward) {
       _show.value = true;
     }
   }
@@ -36,6 +36,16 @@ class DetalleCanchaBLoc extends ChangeNotifier {
     super.dispose();
   }
 
-  void setIndex(bool value) => this._cargando.value = value; 
-  void setEstadoAnimacion(bool value) => this._animacionCalendar.value = value; 
+  void changeCargandoTrue() {
+    _cargando.value = true;
+    notifyListeners();
+  }
+
+  void changeCargandoFalse() {
+    _cargando.value = false;
+    notifyListeners();
+  }
+
+  //void setIndex(bool value) => this._cargando.value = value;
+  void setEstadoAnimacion(bool value) => this._animacionCalendar.value = value;
 }

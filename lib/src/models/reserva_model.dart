@@ -39,7 +39,7 @@ class ReservaModel {
     this.empresaNombre,
     this.canchaNombre,
     this.empresaId,
-    this.observacion,
+    this.observacion,this.precioPromocionEstado
   });
 
   String reservaId;
@@ -63,6 +63,7 @@ class ReservaModel {
   String comision;
   String reservaEstado;
   String idUser;
+  String precioPromocionEstado;
 
   String reservaCosto;
   String reservaColor;
@@ -100,5 +101,6 @@ class ReservaModel {
         reservaEstado: json["estado"],
         idUser: json["idUser"],
         observacion: json["observacion"],
+        precioPromocionEstado: json["precioPromocionEstado"],
       );
 }

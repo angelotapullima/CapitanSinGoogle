@@ -16,6 +16,7 @@ import 'package:capitan_sin_google/src/preferencias/Preferencias%20Bufi%20Paymen
 import 'package:capitan_sin_google/src/preferencias/preferencias_usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -74,103 +75,106 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<DetalleCanchaBLoc>(
-          create: (_) => DetalleCanchaBLoc(),
-        ),
-        /*  ChangeNotifierProvider<IndexFase>(
-          create: (_) => IndexFase(),
-        ), */
-      ],
-      child: ProviderBloc(
-        child: MaterialApp(
-          builder: (BuildContext context, Widget child) {
-            final MediaQueryData data = MediaQuery.of(context);
-            return MediaQuery(
-              data: data.copyWith(textScaleFactor: data.textScaleFactor > 2.0 ? 1.2 : data.textScaleFactor),
-              child: child,
-            );
-          },
-          localizationsDelegates: [
-            RefreshLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('es', 'ES'), // Spanish, no country code
-            //const Locale('en', 'EN'), // English, no country code
-          ],
-          localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {
-            //print("change language");
-            return locale;
-          },
-          theme: ThemeData(
-            primarySwatch: Colors.green,
-            scaffoldBackgroundColor: Color(0xFFF0F1F5),
-            canvasColor: Colors.transparent,
-            textTheme: GoogleFonts.montserratTextTheme(),
+    return ScreenUtilInit(
+      designSize: Size(375, 812),
+      builder: () => MultiProvider(
+        providers: [
+          ChangeNotifierProvider<DetalleCanchaBLoc>(
+            create: (_) => DetalleCanchaBLoc(),
           ),
-          debugShowCheckedModeBanner: false,
-          title: 'Capitán',
-          initialRoute: 'splash',
-          routes: {
-            "login": (BuildContext context) => LoginPage(),
-            "onboarding": (BuildContext context) => LandingPage(),
-            "home": (BuildContext context) => HomePage(),
-            'guia': (BuildContext context) => LandingPageGuia(),
-            /* "homeSubTorneo": (BuildContext context) => HomeSubTorneoPage(),
-              "homeTorneo": (BuildContext context) => HomeTorneoPage(),
-              "notificationPage": (BuildContext context) => NotificationPage(), */
-            //"registroReserva": (BuildContext context) => RegistroReserva(),
-            "detalleReserva": (BuildContext context) => DetalleReserva(),
-            "registroPage": (BuildContext context) => RegistroUserPage(),
-            //"registroEquipos": (BuildContext context) => RegistroEquipos(),
-            //"detalleMisEquipos"  : (BuildContext context) => DetalleMisEquipos(),
-            //"registroJugadores": (BuildContext context) => RegistroJugadores(),
-            'splash': (BuildContext context) => Splash(),
-            //'detalleChats': (BuildContext context) => DetalleChats(),
-            /* 'todosMisEquipos': (BuildContext context) => TodosMisEquipos(),
-              'todosOtrosEquipos': (BuildContext context) => TodosOtrosEquipos(), */
-            /* 'todosMisTorneos': (BuildContext context) => TodosMisTorneos(),
-              'todosOtrosTorneos': (BuildContext context) => TodosOtrosTorneos(),
-              /* 'perfilUsuario': (BuildContext context) => PerfilUsuario(),
-              'profileUsuarios': (BuildContext context) => ProfileUsuario(), */
-              'misMovimientos': (BuildContext context) => MisMovimientosPage(),
-              'ticketMovimientos': (BuildContext context) => TicketMovimientos(),
-              'misReservas': (BuildContext context) => MisReservasPage(),
-              'comentariosPage': (BuildContext context) => ComentariosPage(), */
-            //'detalleForo': (BuildContext context) => DetalleForo(),
-            //'notificacionesPage': (BuildContext context) => NotificacionesPage(),
-            //'retarEquipo': (BuildContext context) => RetarEquipoPage(),
-            /* 'retosNotificaciones': (BuildContext context) => RetosNotificaciones(),
-              'detalleReservas': (BuildContext context) => DetalleReserva(),
-              'solicitarRecarga': (BuildContext context) => SolicitarRecarga(),
-              'fotoPerfil': (BuildContext context) => FotoPerfilPage(),
-              'registrarForo': (BuildContext context) => RegistroForo(),
-             
+          /*  ChangeNotifierProvider<IndexFase>(
+            create: (_) => IndexFase(),
+          ), */
+        ],
+        child: ProviderBloc(
+          child: MaterialApp(
+            builder: (BuildContext context, Widget child) {
+              final MediaQueryData data = MediaQuery.of(context);
+              return MediaQuery(
+                data: data.copyWith(textScaleFactor: data.textScaleFactor > 2.0 ? 1.2 : data.textScaleFactor),
+                child: child,
+              );
+            },
+            localizationsDelegates: [
+              RefreshLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('es', 'ES'), // Spanish, no country code
+              //const Locale('en', 'EN'), // English, no country code
+            ],
+            localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {
+              //print("change language");
+              return locale;
+            },
+            theme: ThemeData(
+              primarySwatch: Colors.green,
+              scaffoldBackgroundColor: Color(0xFFF0F1F5),
+              canvasColor: Colors.transparent,
+              textTheme: GoogleFonts.montserratTextTheme(),
+            ),
+            debugShowCheckedModeBanner: false,
+            title: 'Capitán',
+            initialRoute: 'splash',
+            routes: {
+              "login": (BuildContext context) => LoginPage(),
+              "onboarding": (BuildContext context) => LandingPage(),
+              "home": (BuildContext context) => HomePage(),
+              'guia': (BuildContext context) => LandingPageGuia(),
+              /* "homeSubTorneo": (BuildContext context) => HomeSubTorneoPage(),
+                "homeTorneo": (BuildContext context) => HomeTorneoPage(),
+                "notificationPage": (BuildContext context) => NotificationPage(), */
+              //"registroReserva": (BuildContext context) => RegistroReserva(),
+              "detalleReserva": (BuildContext context) => DetalleReserva(),
+              "registroPage": (BuildContext context) => RegistroUserPage(),
+              //"registroEquipos": (BuildContext context) => RegistroEquipos(),
+              //"detalleMisEquipos"  : (BuildContext context) => DetalleMisEquipos(),
+              //"registroJugadores": (BuildContext context) => RegistroJugadores(),
+              'splash': (BuildContext context) => Splash(),
+              //'detalleChats': (BuildContext context) => DetalleChats(),
+              /* 'todosMisEquipos': (BuildContext context) => TodosMisEquipos(),
+                'todosOtrosEquipos': (BuildContext context) => TodosOtrosEquipos(), */
+              /* 'todosMisTorneos': (BuildContext context) => TodosMisTorneos(),
+                'todosOtrosTorneos': (BuildContext context) => TodosOtrosTorneos(),
+                /* 'perfilUsuario': (BuildContext context) => PerfilUsuario(),
+                'profileUsuarios': (BuildContext context) => ProfileUsuario(), */
+                'misMovimientos': (BuildContext context) => MisMovimientosPage(),
+                'ticketMovimientos': (BuildContext context) => TicketMovimientos(),
+                'misReservas': (BuildContext context) => MisReservasPage(),
+                'comentariosPage': (BuildContext context) => ComentariosPage(), */
+              //'detalleForo': (BuildContext context) => DetalleForo(),
+              //'notificacionesPage': (BuildContext context) => NotificacionesPage(),
+              //'retarEquipo': (BuildContext context) => RetarEquipoPage(),
+              /* 'retosNotificaciones': (BuildContext context) => RetosNotificaciones(),
+                'detalleReservas': (BuildContext context) => DetalleReserva(),
+                'solicitarRecarga': (BuildContext context) => SolicitarRecarga(),
+                'fotoPerfil': (BuildContext context) => FotoPerfilPage(),
+                'registrarForo': (BuildContext context) => RegistroForo(),
+               
+                'actualizarFoto': (BuildContext context) => ActualizarFotoPerfil(),
+                'informacionPerfil': (BuildContext context) => InformacionPerfil(),
+                'editarPerfil': (BuildContext context) => EditarPerfil(),
+                'registroForoTorneo': (BuildContext context) => RegistroForoTorneo(), */
+              'forgotPassword': (BuildContext context) => ForgotPassword(),
+              'seleccionarCiudad': (BuildContext context) => SeleccionarCiudad(),
+              'terminosycondiciones': (BuildContext context) => TerminosYCondiciones(),
               'actualizarFoto': (BuildContext context) => ActualizarFotoPerfil(),
-              'informacionPerfil': (BuildContext context) => InformacionPerfil(),
-              'editarPerfil': (BuildContext context) => EditarPerfil(),
-              'registroForoTorneo': (BuildContext context) => RegistroForoTorneo(), */
-            'forgotPassword': (BuildContext context) => ForgotPassword(),
-            'seleccionarCiudad': (BuildContext context) => SeleccionarCiudad(),
-            'terminosycondiciones': (BuildContext context) => TerminosYCondiciones(),
-            'actualizarFoto': (BuildContext context) => ActualizarFotoPerfil(),
-            /* 'guia': (BuildContext context) => LandingPageGuia(),
-              'fotoTorneo': (BuildContext context) => FotoPortadaPage(),
-              'actualizarFotoTorneo': (BuildContext context) => ActualizarFotoTorneo(), */
+              /* 'guia': (BuildContext context) => LandingPageGuia(),
+                'fotoTorneo': (BuildContext context) => FotoPortadaPage(),
+                'actualizarFotoTorneo': (BuildContext context) => ActualizarFotoTorneo(), */
 
-            //VALIDAR USER EMAIL PAGE
-            'validateUserEmail': (BuildContext context) => ValidarUserEmailPage(),
+              //VALIDAR USER EMAIL PAGE
+              'validateUserEmail': (BuildContext context) => ValidarUserEmailPage(),
 
-            /* 'pag2': (BuildContext context) => Pagina2(),
-                  'pag3': (BuildContext context) => Pagina3(),
-                  'pag4': (BuildContext context) => Pagina4(),
-                  'seleEquipo': (BuildContext context) => SeleccionarEquipoPage(),
-                  'seleEquipoGI': (BuildContext context) => SeleccionarEquiposIntanciasGrupos(), */
-          },
+              /* 'pag2': (BuildContext context) => Pagina2(),
+                    'pag3': (BuildContext context) => Pagina3(),
+                    'pag4': (BuildContext context) => Pagina4(),
+                    'seleEquipo': (BuildContext context) => SeleccionarEquipoPage(),
+                    'seleEquipoGI': (BuildContext context) => SeleccionarEquiposIntanciasGrupos(), */
+            },
+          ),
         ),
       ),
     );

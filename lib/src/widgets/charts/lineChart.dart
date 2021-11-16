@@ -77,9 +77,9 @@ class _LineChartSample2State extends State<LineChartSample2> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) =>
+          /* getTextStyles: (value) =>
               const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
-          getTitles: (value) {
+           */getTitles: (value) {
             switch (value.toInt()) {
               case 2:
                 return 'MAR';
@@ -94,11 +94,11 @@ class _LineChartSample2State extends State<LineChartSample2> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => const TextStyle(
+          /* getTextStyles: (value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
             fontSize: 15,
-          ),
+          ), */
           getTitles: (value) {
             switch (value.toInt()) {
               case 1:
@@ -171,9 +171,9 @@ class _LineChartSample2State extends State<LineChartSample2> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) =>
+          /* getTextStyles: (value) =>
               const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
-          getTitles: (value) {
+           */getTitles: (value) {
             switch (value.toInt()) {
               case 2:
                 return 'MAR';
@@ -188,11 +188,11 @@ class _LineChartSample2State extends State<LineChartSample2> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => const TextStyle(
+          /* getTextStyles: (value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
             fontSize: 15,
-          ),
+          ), */
           getTitles: (value) {
             switch (value.toInt()) {
               case 1:

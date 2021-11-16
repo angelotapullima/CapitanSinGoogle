@@ -193,6 +193,32 @@ String separadorHora(String hora) {
 }
 
 
+
+
+
+obtenerRangoFechaSemanal(String dateInicio, String dateFin) {
+  if ((dateInicio == 'null' || dateInicio == '') && (dateFin == 'null' || dateFin == '')) {
+    return '';
+  }
+
+  var fecha1 = DateTime.parse(dateInicio);
+  var fecha2 = DateTime.parse(dateFin);
+
+  final DateFormat dia = new DateFormat('dd', 'es');
+  final DateFormat mes = new DateFormat('MMMM', 'es');
+  //final DateFormat year = new DateFormat('yyyy', 'es');
+
+  var mes1 = mes.format(fecha1);
+  var mes2 = mes.format(fecha2);
+
+  if (mes1 == mes2) {
+    return 'del ${dia.format(fecha1)} al ${dia.format(fecha2)} de $mes1';
+  } else {
+    return 'del ${dia.format(fecha1)} $mes1 al ${dia.format(fecha2)} $mes2';
+  }
+}
+
+
 /* 
 Future<bool> validarPeticionAPiPartidos(String fecha) async {
   final peticionPartidosDatabase = PeticionPartidosDatabase();

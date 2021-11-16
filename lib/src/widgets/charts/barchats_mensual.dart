@@ -1,9 +1,16 @@
+
+
+
+
+import 'package:capitan_sin_google/src/bloc/provider_bloc.dart';
 import 'package:capitan_sin_google/src/models/reporte_mensual_model.dart';
-import 'package:capitan_sin_google/src/pages/report/detail_reportMensual.dart';
+import 'package:capitan_sin_google/src/theme/theme.dart';
 import 'package:capitan_sin_google/src/utils/responsive.dart';
-import 'package:flutter/gestures.dart';
+import 'package:capitan_sin_google/src/utils/utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BarChartMensual extends StatefulWidget {
   BarChartMensual({
@@ -13,6 +20,7 @@ class BarChartMensual extends StatefulWidget {
     @required this.reportes,
     @required this.idCancha,
     @required this.idEmpresa,
+    /*  */
   }) : super(key: key);
 
   final double maximoValor;
@@ -29,89 +37,108 @@ class BarChartMensualState extends State<BarChartMensual> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex;
+  String mes = '';
+  String cantidad = '';
+  String textc = '';
+  String monto = '';
+  String fechaI = '';
+  String fechaF = '';
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            opaque: false,
-            transitionDuration: const Duration(milliseconds: 700),
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return DetalleReportMensual(idCancha: widget.idCancha, idEmpresa: widget.idEmpresa);
-            },
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   PageRouteBuilder(
+        //     opaque: false,
+        //     transitionDuration: const Duration(milliseconds: 700),
+        //     pageBuilder: (context, animation, secondaryAnimation) {
+        //       return DetalleReportMensual(idCancha: widget.idCancha, idEmpresa: widget.idEmpresa);
+        //     },
+        //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        //       return FadeTransition(
+        //         opacity: animation,
+        //         child: child,
+        //       );
+        //     },
+        //   ),
+        // );
       },
-      child: AspectRatio(
-        aspectRatio: 1.1,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          color: Colors.white,
-          child: Stack(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text(
-                      ' ${widget.nombreCancha}',
-                      style: TextStyle(color: Color(0xFF140F44), fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
+      child: Card(
+        shadowColor: NewColors.grayCarnet.withOpacity(0.5),
+        child: AspectRatio(
+          aspectRatio: 1.1,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Text(
+                  '${widget.nombreCancha}',
+                  style: GoogleFonts.poppins(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: NewColors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(10),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
+                    child: BarChart(
+                      mainBarData(responsive, widget.reportes),
+                      //isPlaying ? randomData() : mainBarData(),
+                      swapAnimationDuration: animDuration,
                     ),
-                    SizedBox(
-                      height: responsive.hp(4),
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(30),
+                ),
+                Center(
+                  child: Text(
+                    mes,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      fontSize: ScreenUtil().setSp(24),
+                      color: NewColors.black,
+                      fontWeight: FontWeight.w500,
                     ),
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(30),
+                ),
+                Row(
+                  children: [
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
-                        child: BarChart(
-                          mainBarData(responsive, widget.reportes),
-                          //isPlaying ? randomData() : mainBarData(),
-                          swapAnimationDuration: animDuration,
+                      child: Text(
+                        textc,
+                        style: GoogleFonts.poppins(
+                          fontSize: ScreenUtil().setSp(18),
+                          color: NewColors.black,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: responsive.hp(2),
+                    Text(
+                      cantidad,
+                      style: GoogleFonts.poppins(
+                        fontSize: ScreenUtil().setSp(40),
+                        color: NewColors.orangeLight,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ],
-                ),
-              ),
-              /* Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
-                      color: const Color(0xff0f4a3c),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isPlaying = !isPlaying;
-                        if (isPlaying) {
-                          refreshState();
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ) */
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -123,20 +150,21 @@ class BarChartMensualState extends State<BarChartMensual> {
     double y, {
     bool isTouched = true,
     Color barColor = Colors.blue,
-    double width = 22,
+    double width = 40,
     List<int> showTooltips = const [],
   }) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
+          borderRadius: BorderRadius.circular(5),
           y: isTouched ? y + 1 : y,
-          colors: isTouched ? [Colors.red] : [barColor],
-          width: width,
+          colors: isTouched ? [NewColors.orangeLight] : [barColor],
+          width: ScreenUtil().setWidth(width),
           backDrawRodData: BackgroundBarChartRodData(
-            show: true,
+            show: false,
             y: widget.maximoValor,
-            colors: [Colors.grey[300]],
+            colors: [Color(0XFFF5F5F5)],
           ),
         ),
       ],
@@ -155,8 +183,8 @@ class BarChartMensualState extends State<BarChartMensual> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(5),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(40),
+              barColor: NewColors.barrasOff,
             );
           case 1:
             return makeGroupData(
@@ -167,8 +195,8 @@ class BarChartMensualState extends State<BarChartMensual> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(5),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(40),
+              barColor: NewColors.barrasOff,
             );
           case 2:
             return makeGroupData(
@@ -179,8 +207,8 @@ class BarChartMensualState extends State<BarChartMensual> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(5),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(40),
+              barColor: NewColors.barrasOff,
             );
           case 3:
             return makeGroupData(
@@ -191,8 +219,8 @@ class BarChartMensualState extends State<BarChartMensual> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(5),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(40),
+              barColor: NewColors.barrasOff,
             );
           /*case 4:
             return makeGroupData(
@@ -228,25 +256,43 @@ class BarChartMensualState extends State<BarChartMensual> {
       maxY: widget.maximoValor,
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Colors.white,
+            tooltipBgColor: Colors.transparent,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
               String weekDay;
+              String fecha;
+              String c;
               switch (group.x.toInt()) {
                 case 0:
                   weekDay =
                       'del ${repo[group.x.toInt()].fechaInicio} al ${repo[group.x.toInt()].fechaFinal} \n ${repo[group.x.toInt()].cantidad} horas reservadas';
+                  fecha = obtenerRangoFechaSemanal(repo[group.x.toInt()].fechaInicio, repo[group.x.toInt()].fechaFinal);
+                  c = repo[group.x.toInt()].cantidad;
+                  fechaI = '${repo[group.x.toInt()].fechaInicio}';
+                  fechaF = '${repo[group.x.toInt()].fechaFinal}';
                   break;
                 case 1:
                   weekDay =
                       'del ${repo[group.x.toInt()].fechaInicio} al ${repo[group.x.toInt()].fechaFinal} \n ${repo[group.x.toInt()].cantidad} horas reservadas';
+                  fecha = obtenerRangoFechaSemanal(repo[group.x.toInt()].fechaInicio, repo[group.x.toInt()].fechaFinal);
+                  c = repo[group.x.toInt()].cantidad;
+                  fechaI = '${repo[group.x.toInt()].fechaInicio}';
+                  fechaF = '${repo[group.x.toInt()].fechaFinal}';
                   break;
                 case 2:
                   weekDay =
                       'del ${repo[group.x.toInt()].fechaInicio} al ${repo[group.x.toInt()].fechaFinal} \n ${repo[group.x.toInt()].cantidad} horas reservadas';
+                  fecha = obtenerRangoFechaSemanal(repo[group.x.toInt()].fechaInicio, repo[group.x.toInt()].fechaFinal);
+                  c = repo[group.x.toInt()].cantidad;
+                  fechaI = '${repo[group.x.toInt()].fechaInicio}';
+                  fechaF = '${repo[group.x.toInt()].fechaFinal}';
                   break;
                 case 3:
                   weekDay =
                       'del ${repo[group.x.toInt()].fechaInicio} al ${repo[group.x.toInt()].fechaFinal} \n ${repo[group.x.toInt()].cantidad} horas reservadas';
+                  fecha = obtenerRangoFechaSemanal(repo[group.x.toInt()].fechaInicio, repo[group.x.toInt()].fechaFinal);
+                  c = repo[group.x.toInt()].cantidad;
+                  fechaI = '${repo[group.x.toInt()].fechaInicio}';
+                  fechaF = '${repo[group.x.toInt()].fechaFinal}';
                   break;
                 /*case 4:
                   weekDay = 'Viernes';
@@ -258,10 +304,14 @@ class BarChartMensualState extends State<BarChartMensual> {
                   weekDay = 'Domingo';
                   break; */
               }
+              mes = fecha;
+              cantidad = c;
+              textc = 'Cantidad de reservas';
+              monto = '${((rod.y - 1).toInt()).toStringAsFixed(2)}';
               return BarTooltipItem(
                 weekDay + '\n',
                 TextStyle(
-                  color: Color(0xFF140F44),
+                  color: Colors.transparent,
                   fontWeight: FontWeight.bold,
                   fontSize: responsive.ip(2),
                 ),
@@ -269,7 +319,7 @@ class BarChartMensualState extends State<BarChartMensual> {
                   TextSpan(
                     text: '${(rod.y - 1).toInt()} soles recaudados',
                     style: TextStyle(
-                      color: Colors.red,
+                      color: Colors.transparent,
                       fontSize: responsive.ip(1.8),
                       fontWeight: FontWeight.w500,
                     ),
@@ -277,36 +327,44 @@ class BarChartMensualState extends State<BarChartMensual> {
                 ],
               );
             }),
-        touchCallback: (barTouchResponse) {
+        touchCallback: (FlTouchEvent event, barTouchResponse) {
           setState(() {
-            if (barTouchResponse.spot != null && barTouchResponse.touchInput is! PointerUpEvent && barTouchResponse.touchInput is! PointerExitEvent) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
-            }
+            final montoBloc = ProviderBloc.montoRecaudado(context);
+            montoBloc.actualizarMonnto(monto);
+            final reporteBloc = ProviderBloc.reportes(context);
+
+            reporteBloc.obtenerReportesPorFechasDeCancha(
+              fechaI,
+              fechaF,
+              widget.idCancha,
+              widget.idEmpresa,
+            );
+            touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
           });
         },
       ),
       titlesData: FlTitlesData(
         show: true,
+        rightTitles: SideTitles(showTitles: false),
+        topTitles: SideTitles(showTitles: false),
         bottomTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => TextStyle(
-            color: Color(0xFF140F44),
-            fontWeight: FontWeight.w600,
-            fontSize: responsive.ip(1.7),
-          ),
-          margin: responsive.wp(3),
+          /* getTextStyles: (value) => GoogleFonts.poppins(
+            color: NewColors.black,
+            fontWeight: FontWeight.w400,
+            fontSize: ScreenUtil().setSp(14),
+          ), */
+          margin: ScreenUtil().setSp(10),
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return 'Semana \n ${repo[value.toInt()].numeroSemana}';
+                return 'SEM\n ${repo[value.toInt()].numeroSemana}';
               case 1:
-                return 'Semana \n ${repo[value.toInt()].numeroSemana}';
+                return 'SEM\n ${repo[value.toInt()].numeroSemana}';
               case 2:
-                return 'Semana \n ${repo[value.toInt()].numeroSemana}';
+                return 'SEM\n ${repo[value.toInt()].numeroSemana}';
               case 3:
-                return 'Semana \n ${repo[value.toInt()].numeroSemana}';
+                return 'SEM\n ${repo[value.toInt()].numeroSemana}';
               /* case 4:
                 return 'Vie \n 20/04';
               case 5:
@@ -319,30 +377,30 @@ class BarChartMensualState extends State<BarChartMensual> {
           },
         ),
         leftTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (value) => TextStyle(
-            color: Color(0xFF140F44),
-            fontWeight: FontWeight.bold,
-          ),
-          margin: responsive.wp(10),
-          reservedSize: responsive.wp(10),
-          getTitles: (value) {
-            if (value % 250 == 0) {
-              return 'S/.${value.toInt()}';
-            }
-            return '';
-            /*  if (value == 10) {
-              return ' 10G';
-            } else if (value == 20) {
-              return ' 20G';
-            } else if (value == valorMaximoGrafico) {
-              return ' ${valorMaximoGrafico.toInt()}G';
-            } else if (value == valorMaximoGrafico +40) {
-              return ' ${valorMaximoGrafico +40.toInt()}G';
-            }else{
-              return '';
-            } */
-          },
+          showTitles: false,
+          //  /*  getTextStyles: (value) => TextStyle(
+          //     color: Color(0xFF140F44),
+          //     fontWeight: FontWeight.bold,
+          //   ), */
+          //   margin: responsive.wp(10),
+          //   reservedSize: responsive.wp(10),
+          //   getTitles: (value) {
+          //     if (value % 250 == 0) {
+          //       return 'S/.${value.toInt()}';
+          //     }
+          //     return '';
+          //     /*  if (value == 10) {
+          //       return ' 10G';
+          //     } else if (value == 20) {
+          //       return ' 20G';
+          //     } else if (value == valorMaximoGrafico) {
+          //       return ' ${valorMaximoGrafico.toInt()}G';
+          //     } else if (value == valorMaximoGrafico +40) {
+          //       return ' ${valorMaximoGrafico +40.toInt()}G';
+          //     }else{
+          //       return '';
+          //     } */
+          //   },
         ),
       ),
       borderData: FlBorderData(

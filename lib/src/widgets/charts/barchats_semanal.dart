@@ -1,9 +1,14 @@
+
+
+
+import 'package:capitan_sin_google/src/bloc/provider_bloc.dart';
 import 'package:capitan_sin_google/src/models/reporte_semanal_model.dart';
-import 'package:capitan_sin_google/src/pages/report/detail_report_semanal.dart';
+import 'package:capitan_sin_google/src/theme/theme.dart';
 import 'package:capitan_sin_google/src/utils/responsive.dart';
-import 'package:flutter/gestures.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class BarChartSemanal extends StatefulWidget {
   final double maximoValor;
@@ -21,90 +26,124 @@ class BarChartSemanalState extends State<BarChartSemanal> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex;
+  String mes = '';
+  String cantidad = '';
+  String textc = '';
+  String monto = '';
+  String idCancha = '';
+  String fecha = '';
 
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              opaque: false,
-              transitionDuration: const Duration(milliseconds: 700),
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return DetailsReportSemanal(
-                  idCancha: widget.reportes[0].idCancha,
-                  nombreCanchae: widget.nombreCancha,
-                );
-              },
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-            ),
-          );
-        },
-        child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-          color: Colors.white,
-          child: Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(left: responsive.wp(6), right: responsive.wp(3)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Text(
-                      '${widget.nombreCancha}',
-                      style: TextStyle(color: Color(0xFF140F44), fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
+    return Card(
+      shadowColor: NewColors.grayCarnet.withOpacity(0.5),
+      child: AspectRatio(
+        aspectRatio: 1.3,
+        child: InkWell(
+          onTap: () {
+            // Navigator.push(
+            //   context,
+            //   PageRouteBuilder(
+            //     opaque: false,
+            //     transitionDuration: const Duration(milliseconds: 700),
+            //     pageBuilder: (context, animation, secondaryAnimation) {
+            //       return DetailsReportSemanal(
+            //         idCancha: widget.reportes[0].idCancha,
+            //         nombreCanchae: widget.nombreCancha,
+            //       );
+            //     },
+            //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            //       return FadeTransition(
+            //         opacity: animation,
+            //         child: child,
+            //       );
+            //     },
+            //   ),
+            // );
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Text(
+                  '${widget.nombreCancha}',
+                  style: GoogleFonts.poppins(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: NewColors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(10),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(1)),
+                    child: BarChart(
+                      mainBarData(responsive, widget.reportes),
+                      //isPlaying ? randomData() : mainBarData(),
+                      swapAnimationDuration: animDuration,
                     ),
-                    SizedBox(
-                      height: responsive.hp(6),
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(30),
+                ),
+                Center(
+                  child: Text(
+                    mes,
+                    style: GoogleFonts.poppins(
+                      fontSize: ScreenUtil().setSp(24),
+                      color: NewColors.black,
+                      fontWeight: FontWeight.w500,
                     ),
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(30),
+                ),
+                Row(
+                  children: [
                     Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: responsive.wp(1)),
-                        child: BarChart(
-                          mainBarData(responsive, widget.reportes),
-                          //isPlaying ? randomData() : mainBarData(),
-                          swapAnimationDuration: animDuration,
+                      child: Text(
+                        textc,
+                        style: GoogleFonts.poppins(
+                          fontSize: ScreenUtil().setSp(18),
+                          color: NewColors.black,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: responsive.hp(2),
+                    Text(
+                      cantidad,
+                      style: GoogleFonts.poppins(
+                        fontSize: ScreenUtil().setSp(40),
+                        color: NewColors.orangeLight,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ],
-                ),
-              ),
-              /* Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    icon: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
-                      color: const Color(0xff0f4a3c),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isPlaying = !isPlaying;
-                        if (isPlaying) {
-                          refreshState();
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ) */
-            ],
+                )
+                // Center(
+                //   child: AnimatedBuilder(
+                //       animation: widget.controller,
+                //       builder: (_, t) {
+                //         return Text(
+                //           widget.controller.mes,
+                //           style: GoogleFonts.poppins(
+                //             fontSize: ScreenUtil().setSp(24),
+                //             color: NewColors.black,
+                //             fontWeight: FontWeight.w500,
+                //           ),
+                //         );
+                //       }),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
@@ -116,20 +155,21 @@ class BarChartSemanalState extends State<BarChartSemanal> {
     double y, {
     bool isTouched = true,
     Color barColor = Colors.blue,
-    double width = 22,
+    double width = 40,
     List<int> showTooltips = const [],
   }) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
+          borderRadius: BorderRadius.circular(5),
           y: isTouched ? y + 1 : y,
-          colors: isTouched ? [Colors.red] : [barColor],
-          width: width,
+          colors: isTouched ? [NewColors.orangeLight] : [barColor],
+          width: ScreenUtil().setWidth(width),
           backDrawRodData: BackgroundBarChartRodData(
-            show: true,
+            show: false,
             y: widget.maximoValor,
-            colors: [Colors.grey[300]],
+            colors: [Color(0XFFF5F5F5)],
           ),
         ),
       ],
@@ -137,7 +177,7 @@ class BarChartSemanalState extends State<BarChartSemanal> {
     );
   }
 
-  List<BarChartGroupData> showingGroups(Responsive responsive, List<ReporteSemanalModel> reports) => List.generate(7, (i) {
+  List<BarChartGroupData> showingGroups(List<ReporteSemanalModel> reports) => List.generate(7, (i) {
         switch (i) {
           case 0:
             return makeGroupData(
@@ -148,8 +188,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           case 1:
             return makeGroupData(
@@ -160,8 +200,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           case 2:
             return makeGroupData(
@@ -172,8 +212,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           case 3:
             return makeGroupData(
@@ -184,8 +224,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           case 4:
             return makeGroupData(
@@ -196,8 +236,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           case 5:
             return makeGroupData(
@@ -208,8 +248,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           case 6:
             return makeGroupData(
@@ -220,8 +260,8 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                       ? double.parse(reports[i].monto)
                       : 0.0,
               isTouched: i == touchedIndex,
-              width: responsive.wp(3),
-              barColor: Colors.green,
+              width: ScreenUtil().setWidth(25),
+              barColor: NewColors.barrasOff,
             );
           default:
             return null;
@@ -233,36 +273,78 @@ class BarChartSemanalState extends State<BarChartSemanal> {
       maxY: widget.maximoValor,
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Color(0xFF140F44),
+            tooltipBgColor: Colors.transparent,
             getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              // widget.controller.changeMes(repo[group.x.toInt()].mes);
+
+              // widget.controller.changeValue('S/${(rod.y - 1)}');
               String weekDay;
+              String mesp;
+              String c;
               switch (group.x.toInt()) {
                 case 0:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].idCancha}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
                   break;
                 case 1:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].mes}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
                   break;
                 case 2:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].mes}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
                   break;
                 case 3:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].mes}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
                   break;
                 case 4:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].mes}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
                   break;
                 case 5:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].mes}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
                   break;
                 case 6:
                   weekDay = '${repo[group.x.toInt()].dia} de\n ${repo[group.x.toInt()].mes}\n ${repo[group.x.toInt()].idCancha}';
+                  mesp = '${repo[group.x.toInt()].mes}';
+                  c = '${repo[group.x.toInt()].cantidad}';
+                  idCancha = '${repo[group.x.toInt()].idCancha}';
+                  fecha = '${repo[group.x.toInt()].fechaReporte}';
+
                   break;
               }
+
+              mes = mesp;
+              cantidad = c;
+
+              textc = 'Cantidad de reservas';
+              monto = '${((rod.y - 1).toInt()).toStringAsFixed(2)}';
+
+              //'S/.${(rod.y - 1).toString()}';
               return BarTooltipItem(
                 weekDay + '\n',
                 TextStyle(
-                  color: Colors.white,
+                  color: Colors.transparent,
                   fontWeight: FontWeight.bold,
                   fontSize: responsive.ip(2),
                 ),
@@ -270,7 +352,7 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                   TextSpan(
                     text: 'S/.${(rod.y - 1).toString()} soles recaudados',
                     style: TextStyle(
-                      color: Colors.red,
+                      color: Colors.transparent,
                       fontSize: responsive.ip(1.8),
                       fontWeight: FontWeight.w500,
                     ),
@@ -278,78 +360,82 @@ class BarChartSemanalState extends State<BarChartSemanal> {
                 ],
               );
             }),
-        touchCallback: (barTouchResponse) {
+        touchCallback: (FlTouchEvent event, barTouchResponse) {
           setState(() {
-            if (barTouchResponse.spot != null && barTouchResponse.touchInput is! PointerUpEvent && barTouchResponse.touchInput is! PointerExitEvent) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
-            }
+            final montoBloc = ProviderBloc.montoRecaudado(context);
+            montoBloc.actualizarMonnto(monto);
+
+            final reportsMensualAndSemanalBloc = ProviderBloc.reportsGeneral(context);
+            reportsMensualAndSemanalBloc.obtenerReportePorDia(fecha, idCancha);
+            touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
           });
         },
       ),
       titlesData: FlTitlesData(
         show: true,
+        rightTitles: SideTitles(showTitles: false),
+        topTitles: SideTitles(showTitles: false),
         bottomTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => TextStyle(
-            color: Color(0xFF140F44),
-            fontWeight: FontWeight.w600,
-            fontSize: responsive.ip(1.5),
-          ),
-          margin: responsive.hp(1),
+          /*  getTextStyles: (value) => GoogleFonts.poppins(
+            color: NewColors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: ScreenUtil().setSp(14),
+          ), */
+          margin: ScreenUtil().setSp(10),
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return '${repo[value.toInt()].dia} de\n ${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n LUN';
               case 1:
-                return '${repo[value.toInt()].dia} de\n${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n MAR';
+              //de\n${repo[value.toInt()].mes}
               case 2:
-                return '${repo[value.toInt()].dia} de\n${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n MIER';
               case 3:
-                return '${repo[value.toInt()].dia} de\n${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n JUE';
               case 4:
-                return '${repo[value.toInt()].dia} de\n${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n VIE';
               case 5:
-                return '${repo[value.toInt()].dia} de\n${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n SAB';
               case 6:
-                return '${repo[value.toInt()].dia} de\n${repo[value.toInt()].mes}';
+                return '${repo[value.toInt()].dia}\n DOM';
               default:
                 return '';
             }
           },
         ),
         leftTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (value) => TextStyle(
-            color: Color(0xFF140F44),
-            fontWeight: FontWeight.bold,
-          ),
-          margin: responsive.wp(6),
-          reservedSize: responsive.wp(7),
-          getTitles: (value) {
-            if (value % 50 == 0) {
-              return 'S/.${value.toInt()}';
-            }
-            return '';
-            /*  if (value == 10) {
-              return ' 10G';
-            } else if (value == 20) {
-              return ' 20G';
-            } else if (value == valorMaximoGrafico) {
-              return ' ${valorMaximoGrafico.toInt()}G';
-            } else if (value == valorMaximoGrafico +40) {
-              return ' ${valorMaximoGrafico +40.toInt()}G';
-            }else{
-              return '';
-            } */
-          },
+          showTitles: false,
+          // /* getTextStyles: (value) => TextStyle(
+          //   color: Color(0xFF140F44),
+          //   fontWeight: FontWeight.bold,
+          // ), */
+          // margin: responsive.wp(6),
+          // reservedSize: responsive.wp(7),
+          // getTitles: (value) {
+          //   if (value % 50 == 0) {
+          //     return 'S/.${value.toInt()}';
+          //   }
+          //   return '';
+          //   /*  if (value == 10) {
+          //     return ' 10G';
+          //   } else if (value == 20) {
+          //     return ' 20G';
+          //   } else if (value == valorMaximoGrafico) {
+          //     return ' ${valorMaximoGrafico.toInt()}G';
+          //   } else if (value == valorMaximoGrafico +40) {
+          //     return ' ${valorMaximoGrafico +40.toInt()}G';
+          //   }else{
+          //     return '';
+          //   } */
+          // },
         ),
       ),
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(responsive, widget.reportes),
+      barGroups: showingGroups(widget.reportes),
     );
   }
 }

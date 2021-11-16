@@ -89,6 +89,33 @@ class ReservasApi {
     }
   }
 
+
+
+  Future<int> reservaNaranPagoParcialjaAdmin(String idReserva, String pago1) async {
+    try {
+      final url = Uri.parse('$apiBaseURL/api/Empresa/actualizar_pago_1');
+
+      final resp = await http.post(url, body: {
+        'id': idReserva,
+        //'id_user': prefs.idUser,
+        'pago1': pago1,
+        'app': 'true',
+        'tn': prefs.token,
+      });
+
+      final decodedData = json.decode(resp.body);
+      print(decodedData);
+      if (decodedData == 1) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return 0;
+    }
+  }
+
   Future<int> reservaNaranjaAdmin(String idReserva, String pago2) async {
     try {
       final url = Uri.parse('$apiBaseURL/api/Empresa/pagar_restante');
@@ -208,7 +235,7 @@ class ReservasApi {
       } else {
         if (fechaActual == fechex) {
           if (horaActual >= hAperturaNegocio) {
-            horaAperturaOficial = horaActual;
+            horaAperturaOficial = horaActual+1;
           } else {
             horaAperturaOficial = hAperturaNegocio;
           }
@@ -217,6 +244,7 @@ class ReservasApi {
         }
       }
 
+      String precioPromocionEstado = '0';
       String horaFinal;
       String horaCancha;
 
@@ -225,7 +253,7 @@ class ReservasApi {
       String promoFin = listaCancha[0].promoFin;
       String promoPrecio = listaCancha[0].promoPrecio;
 
-      horaAperturaOficial = horaAperturaOficial + 1;
+      //horaAperturaOficial = horaAperturaOficial + 1;
 
       for (int i = horaAperturaOficial; i < hCierreNegocio; i++) {
         int horaFin = i + 1;
@@ -262,7 +290,7 @@ class ReservasApi {
           var fechaInicioPromo = DateTime.parse(promoInicio);
           fechaInicioPromo.add(new Duration(days: 1));
           var fechaFinPromo = DateTime.parse(promoFin);
-          fechaFinPromo = fechaFinPromo.add(new Duration(days: 1));
+          fechaFinPromo = fechaFinPromo.add(new Duration(days: 0));
 
           DateTime fechaActualEnDate = DateTime.parse('$fechex $horaParse:01:00');
 
@@ -271,11 +299,14 @@ class ReservasApi {
           if (fechaActualEnDate.isAfter(fechaInicioPromo)) {
             if (fechaActualEnDate.isBefore(fechaFinPromo)) {
               precioCanchaOficial = promoPrecio;
+              precioPromocionEstado = '1';
             } else {
               precioCanchaOficial = precioCancha;
+              precioPromocionEstado = '0';
             }
           } else {
             precioCanchaOficial = precioCancha;
+              precioPromocionEstado = '0';
           }
         }
 
@@ -289,6 +320,7 @@ class ReservasApi {
             reserva.reservaId = listReservas[x].reservaId;
             reserva.reservaFecha = fechex;
             reserva.diaDeLaSemana = diaDeLaSemana;
+            reserva.precioPromocionEstado = precioPromocionEstado;
             reserva.reservaPrecioCancha = precioCanchaOficial;
             reserva.reservaEstado = listReservas[x].reservaEstado;
             reserva.reservaNombre = listReservas[x].reservaNombre;
@@ -304,20 +336,23 @@ class ReservasApi {
           reserva.reservaPrecioCancha = precioCanchaOficial;
           reserva.reservaEstado = '0';
           reserva.diaDeLaSemana = diaDeLaSemana;
+          reserva.precioPromocionEstado = precioPromocionEstado;
           reserva.reservaNombre = 'cagados';
           reserva.reservaHora = horaFinal;
           reserva.empresaNombre = negocio[0].nombre;
           reserva.reservaHoraCancha = horaCancha;
         }
+        reserva.comision = listaCancha[0].comisionCancha;
 
         listGeneral.add(reserva);
       }
     }
     //horario de apertura y cierre de acuerdo al dia de la semana
-
+    //print('hola');
     return listGeneral;
   }
 
+  
   Future<List<ReservaModel>> obtenerReservaPorIdReserva(String idReserva) async {
     final List<ReservaModel> list = [];
     try {

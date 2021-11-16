@@ -55,6 +55,19 @@ class CanchasDatabase {
     return list;
   }
 
+
+
+
+  Future<List<CanchasResult>> obtenerCanchasConPromociones(String idNegocion) async {
+    final db = await dbprovider.database;
+    final res = await db.rawQuery("SELECT * FROM Canchas WHERE  canchaEstado = '1' and promo_estado = '1' ");
+
+    List<CanchasResult> list = res.isNotEmpty ? res.map((c) => CanchasResult.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  
   deleteCanchas() async {
     final db = await dbprovider.database;
 

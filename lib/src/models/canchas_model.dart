@@ -1,3 +1,4 @@
+
 import 'package:capitan_sin_google/src/utils/constants.dart';
 
 class Canchas {
@@ -35,7 +36,7 @@ class CanchasResult {
     this.horaCancha,
     this.fechaCancha,
     this.saldoActual,
-    this.comision,
+    this.comisionCancha,
     this.soyAdmin,
     this.direccionEmpresa,
   });
@@ -56,6 +57,7 @@ class CanchasResult {
   String promoPrecio;
   String promoInicio;
   String promoFin;
+  String comisionCancha;
   String promoEstado;
 
   String precioCancha;
@@ -63,7 +65,6 @@ class CanchasResult {
   String horaCanchaSinFormat;
   String fechaCancha;
   String saldoActual;
-  String comision;
   String soyAdmin;
   String nombreEmpresa;
   String fotoEmpresa;
@@ -76,6 +77,7 @@ class CanchasResult {
         dimensiones: json["dimensiones"],
         precioD: json["precioD"],
         precioN: json["precioN"],
+        comisionCancha: json["comisionCancha"],
         foto: json["foto"],
         fechaActual: json["fecha_actual"],
         tipo: json["tipo"],

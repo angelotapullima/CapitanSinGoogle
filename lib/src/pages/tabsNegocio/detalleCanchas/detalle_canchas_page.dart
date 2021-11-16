@@ -1,19 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:capitan_sin_google/src/api/reservas_api.dart';
 import 'package:capitan_sin_google/src/bloc/canchas_bloc.dart';
 import 'package:capitan_sin_google/src/bloc/provider_bloc.dart';
 import 'package:capitan_sin_google/src/models/canchas_model.dart';
 import 'package:capitan_sin_google/src/models/reserva_model.dart';
-import 'package:capitan_sin_google/src/pages/tabsNegocio/detalleCanchas/pantalla_coyuntura.dart';
 import 'package:capitan_sin_google/src/pages/tabsNegocio/detalle_reserva_page.dart';
 import 'package:capitan_sin_google/src/utils/WidgetCargandp.dart';
-import 'package:capitan_sin_google/src/utils/constants.dart';
 import 'package:capitan_sin_google/src/utils/responsive.dart';
 import 'package:capitan_sin_google/src/utils/utils.dart';
 import 'package:capitan_sin_google/src/widgets/sliver_header_delegate.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
@@ -80,11 +79,11 @@ class _DetalleCanchasState extends State<DetalleCanchas> {
       body: Stack(
         children: [
           _contenidoDetalleCanchas(widget.canchasResult, responsive, provider, widget.soyduenho),
-          CardBottom(
+          /*  CardBottom(
             idCancha: widget.canchasResult.canchaId,
             responsive: responsive,
             idEmpresa: widget.canchasResult.idEmpresa,
-          ),
+          ), */
           ValueListenableBuilder(
             valueListenable: provider.cargando,
             builder: (BuildContext context, bool data, Widget child) {
@@ -174,7 +173,7 @@ class _ListReservasState extends State<ListReservas> {
           if (snapshot.data.length > 0) {
             return ListView.builder(
               padding: EdgeInsets.only(
-                bottom: responsive.hp(30),
+                bottom: responsive.hp(0),
               ),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -210,10 +209,7 @@ class _ListReservasState extends State<ListReservas> {
           ),
           title: Column(
             children: <Widget>[
-              Container(
-                  height: responsive.ip(10),
-                  width: responsive.ip(29),
-                  child: SvgPicture.asset('assets/svg/LOGO_CAPITAN.svg') //Image.asset('assets/logo_largo.svg'),
+              Container(height: responsive.ip(10), width: responsive.ip(29), child: SvgPicture.asset('assets/svg/LOGO_CAPITAN.svg') //Image.asset('assets/logo_largo.svg'),
                   ),
               Text('Se completo la reserva correctamente'),
             ],
@@ -231,8 +227,8 @@ class _ListReservasState extends State<ListReservas> {
     );
   }
 
-  void modalVerdeAdmin(BuildContext context, CanchasBloc canchasBloc, CanchasResult cancha, String diaDeLaSemana, String fecha, String horaFormat,
-      String precio, String nombreEmpresa, String hora) {
+  void modalVerdeAdmin(BuildContext context, CanchasBloc canchasBloc, CanchasResult cancha, String diaDeLaSemana, String fecha, String horaFormat, String precio,
+      String nombreEmpresa, String hora) {
     nombreReservaController.text = "";
     montoPagarController.text = "";
     telefonoController.text = "";
@@ -348,8 +344,7 @@ class _ListReservasState extends State<ListReservas> {
                       child: TextField(
                         cursorColor: Colors.transparent,
                         maxLines: 1,
-                        decoration:
-                            InputDecoration(border: InputBorder.none, hintStyle: TextStyle(color: Colors.black45), hintText: 'Ingresar nombre'),
+                        decoration: InputDecoration(border: InputBorder.none, hintStyle: TextStyle(color: Colors.black45), hintText: 'Ingresar nombre'),
                         enableInteractiveSelection: false,
                         controller: nombreReservaController,
                       ),
@@ -371,8 +366,7 @@ class _ListReservasState extends State<ListReservas> {
                         cursorColor: Colors.transparent,
                         maxLines: 1,
                         keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            border: InputBorder.none, hintStyle: TextStyle(color: Colors.black45), hintText: 'Ingresar número de teléfono'),
+                        decoration: InputDecoration(border: InputBorder.none, hintStyle: TextStyle(color: Colors.black45), hintText: 'Ingresar número de teléfono'),
                         enableInteractiveSelection: false,
                         controller: telefonoController,
                       ),
@@ -419,15 +413,8 @@ class _ListReservasState extends State<ListReservas> {
                                 color: Colors.black,
                                 child: Row(
                                   children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.symmetric(horizontal: responsive.wp(1), vertical: responsive.hp(1)),
-                                      width: responsive.wp(7),
-                                      child: Image(
-                                        image: AssetImage('assets/img/2.png'),
-                                      ),
-                                    ),
                                     Text(
-                                      '$precio',
+                                      'S/.$precio',
                                       style: TextStyle(fontSize: responsive.ip(3), color: Colors.white, fontWeight: FontWeight.bold),
                                     ),
                                   ],
@@ -442,13 +429,13 @@ class _ListReservasState extends State<ListReservas> {
                       ),
                       Container(
                         width: responsive.wp(40),
-                        height: responsive.hp(14),
+                        height: responsive.hp(15),
                         child: Column(
                           children: <Widget>[
                             Flexible(
                               child: Text(
                                 'Monto a pagar',
-                                style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: responsive.ip(2.3), fontWeight: FontWeight.bold),
                               ),
                             ),
                             SizedBox(
@@ -503,9 +490,9 @@ class _ListReservasState extends State<ListReservas> {
 
                                         var horex = separadorHora(horaFormat);
                                         Navigator.pop(context);
-                                        provider.setIndex(true);
-                                        final res = await reservaApi.reservaVerdeAdmin(cancha.canchaId, nombreReservaController.text, '$horex',
-                                            '$fecha', montoPagarController.text, estado, telefonoController.text, observacionController.text);
+                                        provider.changeCargandoTrue();
+                                        final res = await reservaApi.reservaVerdeAdmin(cancha.canchaId, nombreReservaController.text, '$horex', '$fecha', montoPagarController.text,
+                                            estado, telefonoController.text, observacionController.text);
 
                                         if (res == 1) {
                                           nombreReservaController.text = "";
@@ -524,7 +511,8 @@ class _ListReservasState extends State<ListReservas> {
                                           telefonoController.text = "";
                                           observacionController.text = "";
                                         }
-                                        provider.setIndex(false);
+
+                                        provider.changeCargandoFalse();
                                       }
                                     }
                                   } else {
@@ -573,8 +561,8 @@ class _ListReservasState extends State<ListReservas> {
     );
   }
 
-  void modalNaranjaAdmin(CanchasBloc canchasBloc, String reservaId, CanchasResult cancha, String diaDeLaSemana, String fecha, String horaFormat,
-      String precio, String nombreEmpresa, String hora, String pago, String nombreReserva) {
+  void modalNaranjaAdmin(CanchasBloc canchasBloc, String reservaId, CanchasResult cancha, String diaDeLaSemana, String fecha, String horaFormat, String precio,
+      String nombreEmpresa, String hora, String pago, String nombreReserva) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -756,7 +744,7 @@ class _ListReservasState extends State<ListReservas> {
                                 onPressed: () async {
                                   Navigator.pop(context);
 
-                                  provider.setIndex(true);
+                                  provider.changeCargandoTrue();
                                   final reservaApi = ReservasApi();
 
                                   final res = await reservaApi.reservaNaranjaAdmin(reservaId, '$montoPago'.toString());
@@ -770,7 +758,8 @@ class _ListReservasState extends State<ListReservas> {
                                     //pedticion no correcta
 
                                   }
-                                  provider.setIndex(false);
+
+                                  provider.changeCargandoFalse();
                                 },
                                 color: Colors.green,
                                 textColor: Colors.white,
@@ -808,8 +797,284 @@ class _ListReservasState extends State<ListReservas> {
     );
   }
 
-  void _modalAccionReserva(
-      String reservaId, ReservaModel reserva, CanchasBloc canchasBloc, String diaDeLaSemana, String fecha, CanchasResult cancha, String tipo) {
+  void modalNaranjaPagoParcialAdmin(CanchasBloc canchasBloc, String reservaId, CanchasResult cancha, String diaDeLaSemana, String fecha, String horaFormat, String precio,
+      String nombreEmpresa, String hora, String pago, String nombreReserva) {
+    montoPagarController.text = '';
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        var montoPago = double.parse(precio) - double.parse(pago);
+        final responsive = Responsive.of(context);
+
+        final provider = Provider.of<DetalleCanchaBLoc>(context, listen: false);
+
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(
+            child: Container(
+              padding: MediaQuery.of(context).viewInsets,
+              margin: EdgeInsets.only(top: responsive.hp(10)),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadiusDirectional.only(
+                    topEnd: Radius.circular(20),
+                    topStart: Radius.circular(20),
+                  ),
+                  color: Colors.white),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.all(responsive.ip(1.8)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadiusDirectional.only(
+                          topEnd: Radius.circular(20),
+                          topStart: Radius.circular(20),
+                        ),
+                        color: Colors.orange),
+                    child: Center(
+                      child: Text(
+                        'Reservar Cancha',
+                        style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: responsive.hp(2),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.collections, color: Colors.green),
+                            SizedBox(
+                              width: responsive.wp(3),
+                            ),
+                            Flexible(
+                              child: Text('$nombreEmpresa'),
+                            ),
+                            SizedBox(
+                              width: responsive.wp(3),
+                            ),
+                            Flexible(
+                              child: Text('-'),
+                            ),
+                            SizedBox(
+                              width: responsive.wp(3),
+                            ),
+                            Icon(Icons.collections, color: Colors.green),
+                            SizedBox(
+                              width: responsive.wp(3),
+                            ),
+                            Flexible(
+                              child: Text('${cancha.nombre}'),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: responsive.hp(2),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.calendar_today, color: Colors.green),
+                            Flexible(
+                              child: Text('$fecha'),
+                            ),
+                            SizedBox(
+                              width: responsive.wp(3),
+                            ),
+                            Icon(Icons.copyright, color: Colors.green),
+                            Flexible(
+                              child: Text('$hora'),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: responsive.hp(2),
+                        ),
+                        Text(
+                          'Nombre de la reserva',
+                          style: TextStyle(fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '$nombreReserva',
+                          style: TextStyle(fontSize: responsive.ip(2), color: Colors.black54, fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(2),
+                        ),
+                        Text(
+                          'Reserva',
+                          style: TextStyle(
+                            fontSize: responsive.ip(2.5),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: responsive.hp(1),
+                        ),
+                        Row(children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              'Costo de la cancha',
+                              style: TextStyle(fontSize: responsive.ip(2)),
+                            ),
+                          ),
+                          Text(
+                            'S/ $precio',
+                            style: TextStyle(fontSize: responsive.ip(2), color: Colors.red, fontWeight: FontWeight.bold),
+                          ),
+                        ]),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                'Monto de Primer Pago',
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '- S/ $pago',
+                              style: TextStyle(fontSize: responsive.ip(2), color: Colors.red, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+                        SizedBox(
+                          height: responsive.hp(.5),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                'Resta por pagar',
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'S/ $montoPago',
+                              style: TextStyle(fontSize: responsive.ip(2.5), color: Colors.red, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: responsive.hp(2),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                'Monto a pagar',
+                                style: TextStyle(
+                                  fontSize: responsive.ip(2),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(2),
+                              ),
+                              width: responsive.wp(44),
+                              height: responsive.hp(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black26),
+                              ),
+                              child: TextField(
+                                cursorColor: Colors.transparent,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(border: InputBorder.none, hintStyle: TextStyle(color: Colors.black45), hintText: '0.0'),
+                                enableInteractiveSelection: false,
+                                controller: montoPagarController,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: responsive.hp(2),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            SizedBox(
+                              width: responsive.wp(40),
+                              child: MaterialButton(
+                                onPressed: () async {
+                                  provider.changeCargandoTrue();
+                                  if (montoPagarController.text != '') {
+                                    if (double.parse(montoPagarController.text) <= montoPago) {
+                                      Navigator.pop(context);
+                                      final reservaApi = ReservasApi();
+
+                                      final res = await reservaApi.reservaNaranPagoParcialjaAdmin(reservaId, montoPagarController.text);
+
+                                      if (res == 1) {
+                                        canchasBloc.obtenerReservasPorIDCancha(widget.cancha.canchaId, fecha, diaDeLaSemana);
+                                        //pedticion correctapedidoCorrecto();
+                                        //_refresher(canchasBloc, cancha);
+
+                                      } else {
+                                        //pedticion no correcta
+
+                                      }
+                                    } else {
+                                      showToast2('El monto a pagar no debe ser mayor del restante', Colors.black);
+                                    }
+                                  } else {
+                                    showToast2('Ingrese el monto a pagar ', Colors.black);
+                                  }
+
+                                  provider.changeCargandoFalse();
+                                },
+                                color: Colors.green,
+                                textColor: Colors.white,
+                                child: Text('Pagar'),
+                              ),
+                            ),
+                            SizedBox(
+                              width: responsive.wp(10),
+                            ),
+                            SizedBox(
+                              width: responsive.wp(40),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                color: Colors.red,
+                                textColor: Colors.white,
+                                child: Text('Cancelar'),
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30,
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _modalAccionReserva(String reservaId, ReservaModel reserva, CanchasBloc canchasBloc, String diaDeLaSemana, String fecha, CanchasResult cancha, String tipo) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -865,18 +1130,39 @@ class _ListReservasState extends State<ListReservas> {
                                       onTap: () {
                                         Navigator.pop(context);
 
-                                        modalNaranjaAdmin(
-                                            canchasBloc,
-                                            reserva.reservaId,
-                                            cancha,
-                                            reserva.diaDeLaSemana,
-                                            reserva.reservaFecha,
-                                            reserva.reservaHoraCancha,
-                                            reserva.reservaPrecioCancha,
-                                            reserva.empresaNombre,
-                                            reserva.reservaHora,
-                                            reserva.pago1,
-                                            reserva.reservaNombre);
+                                        modalNaranjaPagoParcialAdmin(canchasBloc, reserva.reservaId, cancha, reserva.diaDeLaSemana, reserva.reservaFecha, reserva.reservaHoraCancha,
+                                            reserva.reservaPrecioCancha, reserva.empresaNombre, reserva.reservaHora, reserva.pago1, reserva.reservaNombre);
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: responsive.hp(1),
+                                        ),
+                                        width: double.infinity,
+                                        child: Text(
+                                          'Pago parcial',
+                                          style: TextStyle(
+                                            fontSize: responsive.ip(2),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Divider(),
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                        (tipo == 'naranja')
+                            ? Container(
+                                child: Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pop(context);
+
+                                        modalNaranjaAdmin(canchasBloc, reserva.reservaId, cancha, reserva.diaDeLaSemana, reserva.reservaFecha, reserva.reservaHoraCancha,
+                                            reserva.reservaPrecioCancha, reserva.empresaNombre, reserva.reservaHora, reserva.pago1, reserva.reservaNombre);
                                       },
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
@@ -1044,12 +1330,8 @@ class _ListReservasState extends State<ListReservas> {
                           padding: EdgeInsets.only(
                             top: responsive.hp(2),
                           ),
-                          child: TicketDetails(
-                              firstTitle: 'Hora de la reserva',
-                              firstDesc: '${reservas.reservaHoraCancha}',
-                              secondTitle: '',
-                              secondDesc: '',
-                              responsive: responsive),
+                          child:
+                              TicketDetails(firstTitle: 'Hora de la reserva', firstDesc: '${reservas.reservaHoraCancha}', secondTitle: '', secondDesc: '', responsive: responsive),
                         ),
                         SizedBox(
                           height: responsive.hp(5),
@@ -1060,7 +1342,7 @@ class _ListReservasState extends State<ListReservas> {
                             color: Colors.red,
                             onPressed: () async {
                               Navigator.pop(context);
-                              provider.setIndex(true);
+                              provider.changeCargandoTrue();
                               final reservaApi = ReservasApi();
 
                               final res = await reservaApi.cancelarReserva(reservaId);
@@ -1074,7 +1356,8 @@ class _ListReservasState extends State<ListReservas> {
                                 //pedticion no correcta
 
                               }
-                              provider.setIndex(false);
+
+                              provider.changeCargandoFalse();
                             },
                             child: Text(
                               'Cancelar',
@@ -1109,42 +1392,48 @@ class _ListReservasState extends State<ListReservas> {
     var color = Color(0xff239f23);
     var reservaNombre = '---';
     var reservaDisponibilidad = 'Disponible';
+    var precio = reserva.reservaPrecioCancha;
     if (reserva.reservaEstado == '1') {
+      precio = reserva.reservaPrecioCancha;
       color = Colors.red;
-      reservaDisponibilidad = 'Reservado';
+      reservaDisponibilidad = 'Alquilado';
       reservaNombre = reserva.reservaNombre;
     } else if (reserva.reservaEstado == '2') {
+      precio = reserva.pago1;
       color = Colors.orange;
       reservaDisponibilidad = 'Reservado';
       reservaNombre = reserva.reservaNombre;
     }
-    return StreamBuilder(
-        stream: canchasBloc.saldoStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              saldoActual = snapshot.data[0].cuentaSaldo;
-              comisionActual = snapshot.data[0].comision;
-            } else {
-              saldoActual = '0';
-              comisionActual = '0';
-            }
-          } else {
-            saldoActual = '0';
-            comisionActual = '0';
-          }
-          return GestureDetector(
-            child: Container(
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: responsive.wp(2),
+          vertical: responsive.hp(.5),
+        ),
+        child: Stack(
+          children: [
+            Container(
               margin: EdgeInsets.symmetric(
-                horizontal: responsive.wp(2),
-                vertical: responsive.hp(.5),
+                vertical: responsive.hp(1.3),
               ),
               padding: EdgeInsets.symmetric(
                 horizontal: responsive.wp(2),
                 vertical: responsive.hp(1),
               ),
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: color),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: color,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.8),
+                    spreadRadius: 4,
+                    blurRadius: 5,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     children: <Widget>[
@@ -1157,74 +1446,101 @@ class _ListReservasState extends State<ListReservas> {
                           ),
                         ),
                       ),
-                      Container(
-                        color: Colors.black.withOpacity(.7),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: responsive.wp(2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: responsive.wp(1), vertical: responsive.hp(1)),
-                              width: responsive.wp(7),
-                              child: Image(
-                                image: AssetImage('assets/img/2.png'),
-                              ),
-                            ),
-                            Text(
-                              double.parse('${reserva.reservaPrecioCancha}').toInt().toString(),
-                              style: TextStyle(color: Colors.white, fontSize: responsive.ip(2.5), fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: responsive.wp(85),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                  Text(
+                    '${obtenerFecha(reserva.reservaFecha)}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
+                  Text(
+                    '$reservaNombre',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: responsive.ip(2),
+                    ),
+                  ),
+                  (reservaDisponibilidad == 'Disponible')
+                      ? (reserva.precioPromocionEstado == '1')
+                          ? Row(
+                              children: [
+                                Spacer(),
+                                Text(
+                                  'Promoción ',
+                                  style: TextStyle(
+                                    color: Colors.yellow[600],
+                                    fontSize: ScreenUtil().setSp(20),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'S/. ${double.parse('$precio').toInt().toString()}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(20),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Spacer(),
+                                Text(
+                                  'S/. ${double.parse('$precio').toInt().toString()}',
+                                  style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )
+                      : Row(
+                          children: [
+                            Spacer(),
                             Text(
-                              '${reserva.reservaFecha}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2),
-                              ),
-                            ),
-                            Text(
-                              '$reservaDisponibilidad',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2),
-                              ),
-                            ),
-                            Text(
-                              '$reservaNombre',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: responsive.ip(2),
-                              ),
+                              'S/. ${double.parse('$precio').toInt().toString()}',
+                              style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
-                      ),
-                      Container(
-                        width: responsive.wp(7),
-                      )
-                    ],
-                  )
                 ],
               ),
             ),
-            onTap: () async {
-              //if (double.parse(saldoActual) > 0) {
-              if (widget.duenho == 1) {
-                //eres Administraidor
-                if (reserva.reservaEstado == '1') {
-                  /* Navigator.push(
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: responsive.wp(2),
+                  vertical: responsive.hp(.5),
+                ),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 4,
+                      blurRadius: 5,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Text(
+                  '$reservaDisponibilidad',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+      onTap: () async {
+        //if (double.parse(saldoActual) > 0) {
+        if (widget.duenho == 1) {
+          //eres Administraidor
+          if (reserva.reservaEstado == '1') {
+            /* Navigator.push(
                     context,
                     PageRouteBuilder(
                       opaque: false,
@@ -1240,78 +1556,16 @@ class _ListReservasState extends State<ListReservas> {
                       },
                     ),s
                   ); */
-                  _modalAccionReserva(reserva.reservaId, reserva, canchasBloc, reserva.diaDeLaSemana, reserva.reservaFecha, cancha, 'rojo');
-                } else if (reserva.reservaEstado == '2') {
-                  _modalAccionReserva(reserva.reservaId, reserva, canchasBloc, reserva.diaDeLaSemana, reserva.reservaFecha, cancha, 'naranja');
-                } else {
-                  modalVerdeAdmin(context, canchasBloc, cancha, reserva.diaDeLaSemana, reserva.reservaFecha, reserva.reservaHoraCancha,
-                      reserva.reservaPrecioCancha, reserva.empresaNombre, reserva.reservaHora);
-                }
-              } else {
-                if (reserva.reservaEstado != '1' && reserva.reservaEstado != '2') {
-                  //CanchasResult canchasResult = CanchasResult();
-                  /*  CanchasResult canchasResult = CanchasResult();
-                  canchasResult.precioCancha = reserva.reservaPrecioCancha;
-                  canchasResult.horaCancha = reserva.reservaHora;
-                  canchasResult.fechaCancha = reserva.reservaFecha;
-                  canchasResult.canchaId = cancha.canchaId;
-                  canchasResult.saldoActual = saldoActual;
-                  canchasResult.comision = comisionActual;
-                  canchasResult.horaCanchaSinFormat = reserva.reservaHoraCancha;
-
-                  ReservaCancha2Model datosReserva = ReservaCancha2Model();
-                  datosReserva.idCancha = cancha.canchaId;
-                  datosReserva.nombreCancha = cancha.nombre;
-                  datosReserva.nombreNegocio = reserva.empresaNombre;
-                  datosReserva.fecha = reserva.reservaFecha;
-                  datosReserva.hora = reserva.reservaHora;
-                  datosReserva.horaReserva = reserva.reservaHoraCancha;
-                  datosReserva.tipoUsuario = widget.duenho.toString();
-                  datosReserva.pago1 = reserva.reservaPrecioCancha;
-                  datosReserva.pagoComision = '3';
-
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 700),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return ReservarCanchaPage(
-                          canchita: datosReserva,
-                        );
-                      },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-
-                 */
-
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      opaque: false,
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return PantallaCoyuntura(
-                          idEmpresa: widget.cancha.idEmpresa,
-                        );
-                      },
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                }
-              }
-            },
-          );
-        });
+            _modalAccionReserva(reserva.reservaId, reserva, canchasBloc, reserva.diaDeLaSemana, reserva.reservaFecha, cancha, 'rojo');
+          } else if (reserva.reservaEstado == '2') {
+            _modalAccionReserva(reserva.reservaId, reserva, canchasBloc, reserva.diaDeLaSemana, reserva.reservaFecha, cancha, 'naranja');
+          } else {
+            modalVerdeAdmin(context, canchasBloc, cancha, reserva.diaDeLaSemana, reserva.reservaFecha, reserva.reservaHoraCancha, reserva.reservaPrecioCancha,
+                reserva.empresaNombre, reserva.reservaHora);
+          }
+        } 
+      },
+    );
   }
 }
 
@@ -1413,10 +1667,10 @@ class _HeaderpersistentDCanchasState extends State<HeaderpersistentDCanchas> {
                 ),
                 child: DatePicker(
                   initialData,
-                  height: responsive.hp(12),
+                  height: responsive.hp(13),
                   width: responsive.wp(15),
                   initialSelectedDate: DateTime.now(),
-                  selectionColor: Colors.green,
+                  selectionColor: Colors.black,
                   locale: 'es_Es',
                   controller: _controller,
                   dateTextStyle: TextStyle(
@@ -1451,258 +1705,6 @@ class _HeaderpersistentDCanchasState extends State<HeaderpersistentDCanchas> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class CardBottom extends StatelessWidget {
-  const CardBottom({
-    Key key,
-    @required this.responsive,
-    @required this.idCancha,
-    @required this.idEmpresa,
-  }) : super(key: key);
-
-  final Responsive responsive;
-  final String idCancha;
-  final String idEmpresa;
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = Provider.of<DetalleCanchaBLoc>(context, listen: false);
-
-    final canchasBloc = ProviderBloc.canchas(context);
-    canchasBloc.obtenerDatosDeCanchaPorId(idCancha, idEmpresa);
-    return ValueListenableBuilder<bool>(
-      valueListenable: bloc.show,
-      builder: (_, value, __) {
-        return AnimatedPositioned(
-          bottom: value ? responsive.hp(00) : -responsive.hp(30),
-          left: 0,
-          right: 0,
-          duration: Duration(milliseconds: 500),
-          child: Container(
-            height: responsive.hp(30),
-            margin: EdgeInsets.only(
-              left: responsive.wp(2),
-              right: responsive.wp(2),
-              top: responsive.hp(4),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            child: StreamBuilder(
-              stream: canchasBloc.datosCanchaPorId,
-              builder: (context, AsyncSnapshot<List<CanchasResult>> snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.length > 0) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: responsive.wp(2),
-                        vertical: responsive.hp(1),
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) => Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                child: Image(image: AssetImage('assets/img/loading.gif'), fit: BoxFit.cover),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                child: Center(
-                                  child: Icon(Icons.error),
-                                ),
-                              ),
-                              imageUrl: '$apiBaseURL/${snapshot.data[0].foto}',
-                              imageBuilder: (context, imageProvider) => Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: responsive.hp(2),
-                                horizontal: responsive.wp(2),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(10.0),
-                                  bottomLeft: Radius.circular(10.0),
-                                ),
-                                color: Color.fromRGBO(0, 0, 0, 0.5),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: responsive.hp(.5),
-                                    ),
-                                    height: responsive.ip(4),
-                                    width: responsive.ip(4),
-                                    child: Image(
-                                      image: AssetImage('assets/img/6-ok.png'),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      '${snapshot.data[0].direccionEmpresa}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: responsive.ip(2),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: responsive.hp(2),
-                                horizontal: responsive.wp(2),
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                                color: Color.fromRGBO(0, 0, 0, 0.5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    width: responsive.wp(55),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          '${snapshot.data[0].nombre}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(2),
-                                          ),
-                                        ),
-                                        Text(
-                                          '${snapshot.data[0].dimensiones}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: responsive.ip(2),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: responsive.wp(2)),
-                                  Expanded(
-                                    child: Container(
-                                      child: Column(
-                                        children: <Widget>[
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: <Widget>[
-                                              Container(
-                                                color: Colors.red,
-                                                width: responsive.wp(5),
-                                                height: responsive.hp(1),
-                                              ),
-                                              Text(
-                                                'Alquilado',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: responsive.ip(2),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: <Widget>[
-                                              Container(
-                                                color: Colors.orange,
-                                                width: responsive.wp(5),
-                                                height: responsive.hp(1),
-                                              ),
-                                              Text(
-                                                'Reservado',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: responsive.ip(2),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                            children: <Widget>[
-                                              Container(
-                                                color: Colors.green,
-                                                width: responsive.wp(5),
-                                                height: responsive.hp(1),
-                                              ),
-                                              Text(
-                                                'Disponible',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: responsive.ip(2),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return Center(
-                      child: CargandoWidget(),
-                    );
-                  }
-                } else {
-                  return Center(
-                    child: CargandoWidget(),
-                  );
-                }
-              },
-            ),
-          ),
-        );
-      },
     );
   }
 }
